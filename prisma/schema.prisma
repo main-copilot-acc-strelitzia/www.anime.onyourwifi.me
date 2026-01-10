@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_DIRECT")
+}
+
+enum Role {
+  watcher
+  admin
+  main_admin
+}
+
+enum TranscodingStatus {
+  pending
+  running
+  success
+  failed
+  cancelled
+}
+
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  username          String?   @unique
+  passwordHash      String
+  role              Role      @default(watcher)
+  isActive          Boolean   @default(true)
+  ipAddress         String?   // IP address from registration
+  currentTheme      String?   @default("default") // Currently selected theme
+  lastActivityAt    DateTime? // Last activity timestamp for "active users"
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastLogin         DateTime?
+  profileJson       Json?
+  refreshTokens     RefreshToken[]
+  watchHistory      WatchHistory[]
+  videos            Video[]   @relation("userVideos")
+  auditLogsActor    AuditLog[] @relation("actor")
+  uploads           UploadMetric[]
+  adminIPWhitelists AdminIPWhitelist[] @relation("admin")
+  addedIPWhitelists AdminIPWhitelist[] @relation("addedBy")
+  communityPosts    CommunityPost[]
+  communityReplies  CommunityReply[]
+  moderatedPosts    CommunityPost[] @relation("moderators") // Posts they moderate
+  mainModeratedPosts CommunityPost[] @relation("mainModerator") // Posts they are main moderator of
+  
+  @@index([email])
+  @@index([role])
+  @@index([lastActivityAt])
+}
+
+model RefreshToken {
+  id           String   @id @default(uuid())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  tokenHash    String   @unique
+  createdAt    DateTime @default(now())
+  revoked      Boolean  @default(false)
+  expiresAt    DateTime
+  
+  @@index([userId])
+}
+
+model Video {
+  id           String   @id @default(uuid())
+  title        String
+  description  String?
+  createdBy    User?    @relation("userVideos", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  nsfw         Boolean  @default(false)
+  episodes     Episode[]
+  
+  @@index([createdById])
+}
+
+model Episode {
+  id              String   @id @default(uuid())
+  video           Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  videoId         String
+  title           String?
+  seriesTitle     String?
+  season          Int      @default(1)
+  episodeNumber   Int
+  runtimeSec      Int?
+  s3_master_key   String?
+  filesystem_path String?
+  thumbnailPath   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  transcodingJobs TranscodingJob[]
+  watchHistory    WatchHistory[]
+  
+  @@index([videoId])
+  @@index([episodeNumber])
+}
+
+model WatchHistory {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  episode         Episode  @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  episodeId       String
+  lastPositionSec Int      @default(0)
+  watchedAt       DateTime @default(now())
+  
+  @@unique([userId, episodeId])
+  @@index([userId])
+  @@index([episodeId])
+}
+
+model TranscodingJob {
+  id          String   @id @default(uuid())
+  episode     Episode? @relation(fields: [episodeId], references: [id], onDelete: SetNull)
+  episodeId   String?
+  status      TranscodingStatus @default(pending)
+  presetInfo  Json?
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  logsText    String?
+  createdAt   DateTime @default(now())
+  createdById String?
+  
+  @@index([episodeId])
+  @@index([status])
+}
+
+model UploadMetric {
+  id            String   @id @default(uuid())
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId        String?
+  bytesUploaded BigInt
+  createdAt     DateTime @default(now())
+  
+  @@index([userId])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actor       User?    @relation("actor", fields: [actorId], references: [id], onDelete: SetNull)
+  actorId     String?
+  targetId    String?
+  action      String
+  detailsJson Json?
+  createdAt   DateTime @default(now())
+  
+  @@index([actorId])
+  @@index([targetId])
+}
+
+// Admin IP Whitelist for secure admin access
+model AdminIPWhitelist {
+  id              String    @id @default(uuid())
+  user            User      @relation("admin", fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  ipAddress       String
+  addedBy         User?     @relation("addedBy", fields: [addedById], references: [id], onDelete: SetNull)
+  addedById       String?
+  createdAt       DateTime  @default(now())
+  lastAccessedAt  DateTime?
+  
+  @@unique([userId, ipAddress])
+  @@index([userId])
+  @@index([ipAddress])
+}
+
+// Community Forum Posts
+model CommunityPost {
+  id          String    @id @default(uuid())
+  title       String
+  content     String
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String
+  category    String    @default("general") // general, anime, support, events, off-topic
+  views       Int       @default(0)
+  pinned      Boolean   @default(false)
+  // Moderators: Always contains at least main_admin and discussion creator
+  // If creator leaves, most active user becomes moderator
+  moderators  User[]    @relation("moderators") // Relation to moderators
+  mainModerator User?   @relation("mainModerator", fields: [mainModeratorId], references: [id], onDelete: SetNull)
+  mainModeratorId String?  // Initially the author, can change to most active
+  replyCount  Int       @default(0) // Cached for performance
+  lastActivityAt DateTime? // Last reply timestamp
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  replies     CommunityReply[]
+  
+  @@index([authorId])
+  @@index([category])
+  @@index([createdAt])
+  @@index([mainModeratorId])
+}
+
+// Community Forum Replies
+model CommunityReply {
+  id        String    @id @default(uuid())
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  @@index([postId])
+  @@index([authorId])
+}
+
+// Video Sources - Configured directories where the website reads videos from
+// Main admin configures which directories/drives to read videos from
+model VideoSource {
+  id        String    @id @default(uuid())
+  name      String    // User-friendly name (e.g., "SSD Drive 1", "External HDD")
+  path      String    @unique // Full directory path
+  type      String    @default("local") // local, network, cloud, etc.
+  isActive  Boolean   @default(true) // Enable/disable without deleting
+  priority  Int       @default(0) // Lower number = higher priority
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  @@index([isActive])
+  @@index([priority])
+  @@index([createdAt])
+}
