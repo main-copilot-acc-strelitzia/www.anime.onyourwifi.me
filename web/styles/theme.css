@@ -1,0 +1,60 @@
+/* Netflix/Crunchyroll Dark Theme Colors */
+:root {
+  --color-primary: #e50914;
+  --color-secondary: #f47521;
+  --color-accent: #f47521;
+  --color-background: #141414;
+  --color-sidebar: #221f1f;
+  --color-text: #ffffff;
+  --color-text-secondary: #b3b3b3;
+  --color-border: #404040;
+}
+
+/* Theme-aware components */
+.theme-bg {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.theme-sidebar {
+  background-color: var(--color-sidebar);
+  color: var(--color-text);
+}
+
+.theme-button-primary {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.theme-button-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.theme-input {
+  background-color: var(--color-sidebar);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  border: 1px solid;
+}
+
+.theme-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.theme-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+}
+
+.theme-link {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.theme-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}

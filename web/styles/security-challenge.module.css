@@ -1,0 +1,451 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: float 10s infinite ease-in-out;
+}
+
+.particle:nth-child(1) {
+  left: 10%;
+  top: 10%;
+  animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+  left: 20%;
+  top: 80%;
+  animation-delay: 2s;
+}
+
+.particle:nth-child(3) {
+  left: 80%;
+  top: 50%;
+  animation-delay: 4s;
+}
+
+.particle:nth-child(4) {
+  left: 90%;
+  top: 20%;
+  animation-delay: 6s;
+}
+
+.particle:nth-child(5) {
+  left: 30%;
+  top: 30%;
+  animation-delay: 1s;
+}
+
+.particle:nth-child(n + 6) {
+  left: calc(random() * 100%);
+  top: calc(random() * 100%);
+  animation-delay: calc(random() * 10s);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100px) translateX(50px);
+    opacity: 0;
+  }
+}
+
+.card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 600px;
+  padding: 48px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin: 20px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 8px 0;
+  background: linear-gradient(135deg, #0f3460 0%, #533483 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.questionContainer {
+  background: linear-gradient(135deg, rgba(15, 52, 96, 0.1) 0%, rgba(83, 52, 131, 0.1) 100%);
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 4px solid #0f3460;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Timer */
+.timerBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.timerBox.timerWarning {
+  background: #fff3cd;
+  border-color: #ffc107;
+  animation: pulse 0.5s infinite alternate;
+}
+
+.timerLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timerValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f3460;
+  font-variant-numeric: tabular-nums;
+}
+
+.timerBox.timerWarning .timerValue {
+  color: #856404;
+  animation: blink 0.5s infinite;
+}
+
+@keyframes pulse {
+  from {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+
+  to {
+    box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Error message */
+.error {
+  padding: 12px 16px;
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 6px;
+  font-size: 14px;
+  border-left: 4px solid #dc3545;
+}
+
+/* Input */
+.input {
+  padding: 14px 16px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0f3460;
+  box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.1);
+}
+
+.input:disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Button */
+.button {
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #0f3460 0%, #533483 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 52, 96, 0.3);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Warning box */
+.warningBox {
+  padding: 12px 16px;
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 6px;
+  border-left: 4px solid #ffc107;
+  margin-top: 16px;
+}
+
+.warningText {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footerText {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Lockout screen */
+.lockoutContainer {
+  text-align: center;
+}
+
+.lockoutIcon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  display: inline-block;
+  animation: shake 0.5s infinite;
+}
+
+.lockoutTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #dc3545;
+  margin: 0 0 16px 0;
+}
+
+.lockoutMessage {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 32px 0;
+  line-height: 1.5;
+}
+
+.cooldownTimer {
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+  border-radius: 12px;
+  margin: 24px 0;
+  border: 2px solid #ffc107;
+}
+
+.timerDisplay {
+  font-size: 48px;
+  font-weight: 700;
+  color: #dc3545;
+  margin: 0 0 8px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.timerLabel {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.botWarning {
+  padding: 12px 16px;
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 0;
+  border-left: 4px solid #dc3545;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-10px);
+  }
+
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+/* Spinner for loading */
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0f3460;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: 32px 24px;
+    max-width: 90%;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .question {
+    font-size: 16px;
+  }
+
+  .timerValue {
+    font-size: 20px;
+  }
+
+  .lockoutIcon {
+    font-size: 48px;
+  }
+
+  .lockoutTitle {
+    font-size: 20px;
+  }
+
+  .timerDisplay {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 24px 16px;
+    margin: 16px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .question {
+    font-size: 14px;
+  }
+
+  .input,
+  .button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .warningBox,
+  .error {
+    font-size: 11px;
+  }
+}
