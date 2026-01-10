@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
-import { doubleCsrf } from 'csrf-csrf';
+import * as csrf from 'csrf';
 import { ValidationPipe } from '@nestjs/common';
 import Redis from 'ioredis';
 import * as rateLimit from 'express-rate-limit';
@@ -37,18 +37,21 @@ async function bootstrap() {
     }),
   );
 
-  // CSRF protection with csrf-csrf (actively maintained, replaces csurf)
-  const { doubleCsrfProtection } = doubleCsrf({
-    getSecret: () => process.env.CSRF_SECRET || 'change-me-in-production',
-    cookieOptions: {
-      httpOnly: true,
+  // CSRF protection with csrf (actively maintained, modern replacement for csurf)
+  // Uses double-submit cookie pattern for SPA security
+  const csrfProtection = csrf();
+  
+  app.use((req, res, next) => {
+    // Generate CSRF token for all requests
+    const token = csrfProtection.secretSync();
+    res.locals.csrfToken = csrfProtection.create(token);
+    res.cookie('XSRF-TOKEN', res.locals.csrfToken, {
+      httpOnly: false, // Allow JavaScript to read for SPA
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      signed: false,
-    },
+    });
+    next();
   });
-  
-  app.use(doubleCsrfProtection);
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
