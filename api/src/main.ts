@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
-import * as csurf from 'csurf';
+import { doubleCsrf } from 'csrf-csrf';
 import { ValidationPipe } from '@nestjs/common';
 import Redis from 'ioredis';
 import * as rateLimit from 'express-rate-limit';
@@ -37,16 +37,18 @@ async function bootstrap() {
     }),
   );
 
-  // CSRF: for browser POST forms; API used by SPA should use double-submit cookie or same-site cookies
-  app.use(
-    csurf({
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-      },
-    }),
-  );
+  // CSRF protection with csrf-csrf (actively maintained, replaces csurf)
+  const { doubleCsrfProtection } = doubleCsrf({
+    getSecret: () => process.env.CSRF_SECRET || 'change-me-in-production',
+    cookieOptions: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      signed: false,
+    },
+  });
+  
+  app.use(doubleCsrfProtection);
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
