@@ -1,0 +1,17 @@
+[Unit]
+Description=Strelitzia Transcoder Worker
+After=network.target redis-server.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/srv/strelitzia/transcoder
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node worker.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,40 @@
+{
+  "name": "strelitzia",
+  "version": "0.2.0",
+  "description": "Strelitzia - Cross-platform anime streaming platform",
+  "private": true,
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": ">=9.0.0"
+  },
+  "workspaces": [
+    "web",
+    "api",
+    "transcoder"
+  ],
+  "scripts": {
+    "setup": "node setup.js",
+    "dev": "node dev.js",
+    "build": "npm --workspace=web run build && npm --workspace=api run build && npm --workspace=transcoder run build",
+    "start:web": "npm --workspace=web start",
+    "start:api": "npm --workspace=api start",
+    "start:transcoder": "npm --workspace=transcoder start",
+    "dev:web": "npm --workspace=web run dev",
+    "dev:api": "npm --workspace=api run dev",
+    "dev:transcoder": "npm --workspace=transcoder run dev",
+    "lint": "npm --workspace=web run lint && npm --workspace=api run lint",
+    "prisma:generate": "npm --workspace=api run prisma:generate",
+    "migrate": "npm --workspace=api run migrate",
+    "migrate:deploy": "npm --workspace=api run migrate:deploy",
+    "studio": "npm --workspace=api run prisma:studio"
+  },
+  "keywords": [
+    "anime",
+    "streaming",
+    "hls",
+    "transcoding",
+    "offline"
+  ],
+  "author": "",
+  "license": "MIT"
+}

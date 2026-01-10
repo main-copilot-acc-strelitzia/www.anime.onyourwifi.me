@@ -1,0 +1,17 @@
+[Unit]
+Description=Strelitzia Web Server (Next.js)
+After=network.target strelitzia-api.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/srv/strelitzia/web
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/npm run start
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

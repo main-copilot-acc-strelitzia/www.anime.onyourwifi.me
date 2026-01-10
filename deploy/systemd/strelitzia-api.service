@@ -1,0 +1,18 @@
+[Unit]
+Description=Strelitzia API Server
+After=network.target postgresql.service redis-server.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/srv/strelitzia/api
+Environment=NODE_ENV=production
+Environment=PORT=4000
+ExecStart=/usr/bin/npm run start
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
