@@ -45,8 +45,8 @@ model User {
   addedIPWhitelists AdminIPWhitelist[] @relation("addedBy")
   communityPosts    CommunityPost[]
   communityReplies  CommunityReply[]
-  moderatedPosts    CommunityPost[] @relation("moderators")
-  mainModeratedPosts CommunityPost[] @relation("mainModerator")
+  moderatorOfPosts  CommunityPost[] @relation("moderators")
+  mainModeratorOf   CommunityPost[] @relation("mainModerator")
   
   @@index([email])
   @@index([role])
