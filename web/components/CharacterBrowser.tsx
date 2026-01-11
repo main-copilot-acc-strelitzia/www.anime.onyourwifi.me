@@ -334,7 +334,7 @@ export default function CharacterBrowser() {
                           className="px-3 py-1 rounded-full text-sm"
                           style={{
                             backgroundColor: selectedCharacter.colors.primary,
-                            color: selectedCharacter.colors.sidebar,
+                            color: selectedCharacter.colors.text,
                           }}
                         >
                           {tag}
