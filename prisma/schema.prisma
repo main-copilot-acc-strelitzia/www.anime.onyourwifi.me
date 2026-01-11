@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_DIRECT")
+  directUrl = env("DATABASE_URL_DIRECT", "")
 }
 
 enum Role {
@@ -45,8 +45,8 @@ model User {
   addedIPWhitelists AdminIPWhitelist[] @relation("addedBy")
   communityPosts    CommunityPost[]
   communityReplies  CommunityReply[]
-  moderatedPosts    CommunityPost[] @relation("moderators") // Posts they moderate
-  mainModeratedPosts CommunityPost[] @relation("mainModerator") // Posts they are main moderator of
+  moderatedPosts    CommunityPost[] @relation("moderators")
+  mainModeratedPosts CommunityPost[] @relation("mainModerator")
   
   @@index([email])
   @@index([role])
@@ -181,7 +181,7 @@ model CommunityPost {
   pinned      Boolean   @default(false)
   // Moderators: Always contains at least main_admin and discussion creator
   // If creator leaves, most active user becomes moderator
-  moderators  User[]    @relation("moderators") // Relation to moderators
+  moderators  User[]    @relation("moderators")
   mainModerator User?   @relation("mainModerator", fields: [mainModeratorId], references: [id], onDelete: SetNull)
   mainModeratorId String?  // Initially the author, can change to most active
   replyCount  Int       @default(0) // Cached for performance
