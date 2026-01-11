@@ -12,7 +12,7 @@ import {
   getSimilarCharacters,
   getTotalCharacterCount,
 } from '@/utils/characterUtils';
-import type { CharacterTheme } from '@/data/characters';
+import type { CharacterTheme } from '@/data/themesAndCharacters';
 
 export default function CharacterBrowser() {
   const { currentTheme, setTheme } = useTheme();
