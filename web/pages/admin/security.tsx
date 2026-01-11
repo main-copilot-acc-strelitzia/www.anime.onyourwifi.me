@@ -54,16 +54,10 @@ export default function AdminSecurityPage() {
         const data = await response.json();
         setAdmins(data.data || []);
       } else {
-        addToast({
-          type: 'error',
-          message: 'Failed to fetch admin IPs',
-        });
+        addToast('Failed to fetch admin IPs', 'error');
       }
     } catch (error) {
-      addToast({
-        type: 'error',
-        message: 'Error fetching admin IPs',
-      });
+      addToast('Error fetching admin IPs', 'error');
     } finally {
       setLoading(false);
     }
@@ -73,10 +67,7 @@ export default function AdminSecurityPage() {
     e.preventDefault();
 
     if (!newAdminEmail || !newAdminIP) {
-      addToast({
-        type: 'error',
-        message: 'Email and IP address are required',
-      });
+      addToast('Email and IP address are required', 'error');
       return;
     }
 
@@ -92,25 +83,16 @@ export default function AdminSecurityPage() {
       });
 
       if (response.ok) {
-        addToast({
-          type: 'success',
-          message: 'Admin IP added successfully',
-        });
+        addToast('Admin IP added successfully', 'success');
         setNewAdminEmail('');
         setNewAdminIP('');
         fetchAdminIPs();
       } else {
         const error = await response.json();
-        addToast({
-          type: 'error',
-          message: error.message || 'Failed to add admin IP',
-        });
+        addToast(error.message || 'Failed to add admin IP', 'error');
       }
     } catch (error) {
-      addToast({
-        type: 'error',
-        message: 'Error adding admin IP',
-      });
+      addToast('Error adding admin IP', 'error');
     }
   };
 
@@ -126,22 +108,13 @@ export default function AdminSecurityPage() {
       });
 
       if (response.ok) {
-        addToast({
-          type: 'success',
-          message: 'Admin IP removed',
-        });
+        addToast('Admin IP removed', 'success');
         fetchAdminIPs();
       } else {
-        addToast({
-          type: 'error',
-          message: 'Failed to remove admin IP',
-        });
+        addToast('Failed to remove admin IP', 'error');
       }
     } catch (error) {
-      addToast({
-        type: 'error',
-        message: 'Error removing admin IP',
-      });
+      addToast('Error removing admin IP', 'error');
     }
   };
 

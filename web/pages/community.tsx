@@ -70,10 +70,7 @@ export default function CommunityPage() {
     e.preventDefault();
 
     if (!newPostTitle.trim() || !newPostContent.trim()) {
-      addToast({
-        type: 'error',
-        message: 'Title and content are required',
-      });
+      addToast('Title and content are required', 'error');
       return;
     }
 
@@ -90,25 +87,16 @@ export default function CommunityPage() {
       });
 
       if (response.ok) {
-        addToast({
-          type: 'success',
-          message: 'Post created successfully!',
-        });
+        addToast('Post created successfully!', 'success');
         setNewPostTitle('');
         setNewPostContent('');
         setShowNewPost(false);
         fetchPosts();
       } else {
-        addToast({
-          type: 'error',
-          message: 'Failed to create post',
-        });
+        addToast('Failed to create post', 'error');
       }
     } catch (error) {
-      addToast({
-        type: 'error',
-        message: 'Error creating post',
-      });
+      addToast('Error creating post', 'error');
     }
   };
 
