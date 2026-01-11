@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Card from '@/components/Card';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Alert from '@/components/Alert';
-import Modal from '@/components/Modal';
+import PasswordChangeModal from '@/components/PasswordChangeModal';
 import PasswordStrength from '@/components/PasswordStrength';
 
 export default function Account() {
@@ -185,53 +185,13 @@ export default function Account() {
       </div>
 
       {/* Password Change Modal */}
-      <Modal
+      <PasswordChangeModal
         isOpen={showPasswordModal}
-        title="Change Password"
-        message="Enter your current password and your new password."
+        passwordForm={passwordForm}
+        onPasswordFormChange={setPasswordForm}
         onConfirm={handlePasswordChange}
         onCancel={() => setShowPasswordModal(false)}
-        confirmText="Update Password"
-        cancelText="Cancel"
-        type="info"
-      >
-        <div className="space-y-3">
-          <input
-            type="password"
-            placeholder="Current Password"
-            value={passwordForm.current}
-            onChange={(e) => setPasswordForm({ ...passwordForm, current: e.target.value })}
-            className="w-full px-3 py-2 rounded border"
-            style={{
-              backgroundColor: currentTheme.colors.background,
-              borderColor: currentTheme.colors.border,
-            }}
-          />
-          <input
-            type="password"
-            placeholder="New Password"
-            value={passwordForm.new}
-            onChange={(e) => setPasswordForm({ ...passwordForm, new: e.target.value })}
-            className="w-full px-3 py-2 rounded border"
-            style={{
-              backgroundColor: currentTheme.colors.background,
-              borderColor: currentTheme.colors.border,
-            }}
-          />
-          <PasswordStrength password={passwordForm.new} />
-          <input
-            type="password"
-            placeholder="Confirm New Password"
-            value={passwordForm.confirm}
-            onChange={(e) => setPasswordForm({ ...passwordForm, confirm: e.target.value })}
-            className="w-full px-3 py-2 rounded border"
-            style={{
-              backgroundColor: currentTheme.colors.background,
-              borderColor: currentTheme.colors.border,
-            }}
-          />
-        </div>
-      </Modal>
+      />
     </div>
   );
 }
