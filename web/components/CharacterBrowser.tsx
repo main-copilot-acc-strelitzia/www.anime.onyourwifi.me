@@ -230,7 +230,7 @@ export default function CharacterBrowser() {
                     className="px-2 py-1 text-xs rounded"
                     style={{
                       backgroundColor: char.colors.primary,
-                      color: char.colors.sidebar,
+                      color: char.colors.text,
                     }}
                   >
                     {tag}
@@ -246,7 +246,7 @@ export default function CharacterBrowser() {
                 className="w-full px-3 py-2 rounded font-semibold text-sm transition hover:opacity-90"
                 style={{
                   backgroundColor: char.colors.primary,
-                  color: char.colors.sidebar,
+                  color: char.colors.text,
                 }}
               >
                 Apply Theme
@@ -375,7 +375,7 @@ export default function CharacterBrowser() {
                     className="w-full px-4 py-2 rounded-lg font-semibold transition hover:opacity-90"
                     style={{
                       backgroundColor: selectedCharacter.colors.primary,
-                      color: selectedCharacter.colors.sidebar,
+                      color: selectedCharacter.colors.text,
                     }}
                   >
                     Apply Theme
