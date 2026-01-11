@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
-import * as csrf from 'csrf';
+import * as csurf from 'csurf';
 import { ValidationPipe } from '@nestjs/common';
 import Redis from 'ioredis';
 import * as rateLimit from 'express-rate-limit';
@@ -37,21 +37,16 @@ async function bootstrap() {
     }),
   );
 
-  // CSRF protection with csrf (actively maintained, modern replacement for csurf)
-  // Uses double-submit cookie pattern for SPA security
-  const csrfProtection = csrf();
-  
-  app.use((req, res, next) => {
-    // Generate CSRF token for all requests
-    const token = csrfProtection.secretSync();
-    res.locals.csrfToken = csrfProtection.create(token);
-    res.cookie('XSRF-TOKEN', res.locals.csrfToken, {
-      httpOnly: false, // Allow JavaScript to read for SPA
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    });
-    next();
-  });
+  // CSRF: for browser POST forms; API used by SPA should use double-submit cookie or same-site cookies
+  app.use(
+    csurf({
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      },
+    }),
+  );
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
