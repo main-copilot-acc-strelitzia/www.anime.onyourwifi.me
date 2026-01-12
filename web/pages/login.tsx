@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,7 +10,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { currentTheme } = useTheme();
   const { addToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');

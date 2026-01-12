@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import AdminLayout from '@/components/admin/AdminLayout';
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';

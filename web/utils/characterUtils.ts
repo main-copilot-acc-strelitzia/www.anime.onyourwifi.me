@@ -1,30 +1,25 @@
 /**
  * Character Utility Functions
- * DEPRECATED: These utilities are for admin-only character management
+ * ADMIN-ONLY utilities for character management
  * Watchers should NEVER access character data - use video data instead
  * 
  * For public-facing content, use video streaming functionality
  */
 
-// Import types only - NEVER expose character data to frontend consumers
-import { characters, getCharacterById, searchCharacters, filterBySource, filterByArchetype, filterByTag, getAllSources, getAllArchetypes, getAllTags, getRandomCharacter, getCharacterCount } from '@/data/characters';
-import { additionalCharacters } from '@/data/charactersExtended';
-import { massiveCharacterDatabase } from '@/data/charactersMassive';
-import type { CharacterTheme } from '@/data/characters';
-
-// WARNING: These functions are ADMIN-ONLY and should never be called from watcher-facing code
+import type { CharacterTheme } from '@/data/themesAndCharacters';
+import { characters } from '@/data/themesAndCharacters';
 
 /**
- * ADMIN ONLY: Combined character database
+ * ADMIN ONLY: Get all characters
  * WARNING: Do not expose to watchers
  */
 export const getAllCharacters = (): CharacterTheme[] => {
   console.warn('[ADMIN ONLY] getAllCharacters() - This data should not be accessible to watchers');
-  return [...characters, ...additionalCharacters, ...massiveCharacterDatabase];
+  return [...characters];
 };
 
 /**
- * ADMIN ONLY: Get total character count across all databases
+ * ADMIN ONLY: Get total character count
  * WARNING: Do not expose to watchers
  */
 export const getTotalCharacterCount = (): number => {
@@ -32,7 +27,7 @@ export const getTotalCharacterCount = (): number => {
 };
 
 /**
- * ADMIN ONLY: Get character by ID across all databases
+ * ADMIN ONLY: Get character by ID
  * WARNING: Do not expose to watchers
  */
 export const getCharacterByIdGlobal = (id: string): CharacterTheme | undefined => {
@@ -41,7 +36,7 @@ export const getCharacterByIdGlobal = (id: string): CharacterTheme | undefined =
 };
 
 /**
- * ADMIN ONLY: Search characters across all databases
+ * ADMIN ONLY: Search characters
  * WARNING: Do not expose to watchers
  */
 export const searchAllCharacters = (query: string): CharacterTheme[] => {
@@ -58,7 +53,7 @@ export const searchAllCharacters = (query: string): CharacterTheme[] => {
 };
 
 /**
- * ADMIN ONLY: Get all unique sources across all databases
+ * ADMIN ONLY: Get all unique sources
  * WARNING: Do not expose to watchers
  */
 export const getAllSourcesGlobal = (): string[] => {
@@ -69,11 +64,51 @@ export const getAllSourcesGlobal = (): string[] => {
 };
 
 /**
- * ADMIN ONLY: Filter by source across all databases
+ * ADMIN ONLY: Get all unique archetypes
+ * WARNING: Do not expose to watchers
+ */
+export const getAllArchetypesGlobal = (): string[] => {
+  const allChars = getAllCharacters();
+  const archetypes = new Set<string>();
+  allChars.forEach((c) => archetypes.add(c.archetype));
+  return Array.from(archetypes).sort();
+};
+
+/**
+ * ADMIN ONLY: Get all unique tags
+ * WARNING: Do not expose to watchers
+ */
+export const getAllTagsGlobal = (): string[] => {
+  const allChars = getAllCharacters();
+  const allTags = new Set<string>();
+  allChars.forEach((c) => {
+    c.tags.forEach((tag) => allTags.add(tag));
+  });
+  return Array.from(allTags).sort();
+};
+
+/**
+ * ADMIN ONLY: Filter by source
  * WARNING: Do not expose to watchers
  */
 export const filterBySourceGlobal = (source: string): CharacterTheme[] => {
   return getAllCharacters().filter((c) => c.source === source);
+};
+
+/**
+ * ADMIN ONLY: Filter by archetype
+ * WARNING: Do not expose to watchers
+ */
+export const filterByArchetypeGlobal = (archetype: string): CharacterTheme[] => {
+  return getAllCharacters().filter((c) => c.archetype === archetype);
+};
+
+/**
+ * ADMIN ONLY: Filter by tag
+ * WARNING: Do not expose to watchers
+ */
+export const filterByTagGlobal = (tag: string): CharacterTheme[] => {
+  return getAllCharacters().filter((c) => c.tags.includes(tag));
 };
 
 /**
@@ -90,10 +125,33 @@ export const getCharactersPerSource = (): Record<string, number> => {
 };
 
 /**
- * ADMIN ONLY: Get similar characters
+ * ADMIN ONLY: Get character count per archetype
  * WARNING: Do not expose to watchers
  */
-export const getSimilarCharacters = (characterId: string, limit = 5): CharacterTheme[] => {
+export const getCharactersPerArchetype = (): Record<string, number> => {
+  const allChars = getAllCharacters();
+  const counts: Record<string, number> = {};
+  allChars.forEach((c) => {
+    counts[c.archetype] = (counts[c.archetype] || 0) + 1;
+  });
+  return counts;
+};
+
+/**
+ * ADMIN ONLY: Get random characters
+ * WARNING: Do not expose to watchers
+ */
+export const getRandomCharacters = (count: number = 5): CharacterTheme[] => {
+  const allChars = getAllCharacters();
+  const shuffled = [...allChars].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, allChars.length));
+};
+
+/**
+ * ADMIN ONLY: Get similar characters based on tags and properties
+ * WARNING: Do not expose to watchers
+ */
+export const getSimilarCharacters = (characterId: string, limit: number = 5): CharacterTheme[] => {
   const character = getCharacterByIdGlobal(characterId);
   if (!character) return [];
 
@@ -126,11 +184,36 @@ const calculateSimilarity = (char1: CharacterTheme, char2: CharacterTheme): numb
 };
 
 /**
- * ============================================================
- * PUBLIC WATCHER FUNCTIONS
- * ============================================================
- * These functions are stubs that explicitly prevent access
+ * Character Statistics Interface
  */
+export interface CharacterStatistics {
+  totalCharacters: number;
+  totalSources: number;
+  totalArchetypes: number;
+  totalTags: number;
+  charactersPerSource: Record<string, number>;
+  charactersPerArchetype: Record<string, number>;
+}
+
+/**
+ * ADMIN ONLY: Get character statistics
+ * WARNING: Do not expose to watchers
+ */
+export const getCharacterStatistics = (): CharacterStatistics => {
+  const allChars = getAllCharacters();
+  const sources = getAllSourcesGlobal();
+  const archetypes = getAllArchetypesGlobal();
+  const tags = getAllTagsGlobal();
+
+  return {
+    totalCharacters: allChars.length,
+    totalSources: sources.length,
+    totalArchetypes: archetypes.length,
+    totalTags: tags.length,
+    charactersPerSource: getCharactersPerSource(),
+    charactersPerArchetype: getCharactersPerArchetype(),
+  };
+};
 
 /**
  * SECURITY: Prevent watchers from accessing character database
@@ -151,150 +234,3 @@ export const getWatcherCharacterAccess = (): never => {
  * 
  * Character data is for ADMIN USE ONLY and should never be exposed to watchers.
  */
-
- */
-export const getAllSourcesGlobal = (): string[] => {
-  const allChars = getAllCharacters();
-  const sources = new Set(allChars.map((c) => c.source));
-  return Array.from(sources).sort();
-};
-
-/**
- * Get all unique archetypes across all databases
- */
-export const getAllArchetypesGlobal = (): string[] => {
-  const allChars = getAllCharacters();
-  const archetypes = new Set(allChars.map((c) => c.archetype));
-  return Array.from(archetypes).sort();
-};
-
-/**
- * Get all unique tags across all databases
- */
-export const getAllTagsGlobal = (): string[] => {
-  const allChars = getAllCharacters();
-  const allTags = new Set<string>();
-  allChars.forEach((c) => {
-    c.tags.forEach((tag) => allTags.add(tag));
-  });
-  return Array.from(allTags).sort();
-};
-
-/**
- * Filter characters by source across all databases
- */
-export const filterBySourceGlobal = (source: string): CharacterTheme[] => {
-  const allChars = getAllCharacters();
-  return allChars.filter((c) => c.source === source);
-};
-
-/**
- * Filter characters by archetype across all databases
- */
-export const filterByArchetypeGlobal = (archetype: string): CharacterTheme[] => {
-  const allChars = getAllCharacters();
-  return allChars.filter((c) => c.archetype === archetype);
-};
-
-/**
- * Filter characters by tag across all databases
- */
-export const filterByTagGlobal = (tag: string): CharacterTheme[] => {
-  const allChars = getAllCharacters();
-  return allChars.filter((c) => c.tags.includes(tag));
-};
-
-/**
- * Get characters count per source
- */
-export const getCharactersPerSource = (): Record<string, number> => {
-  const allChars = getAllCharacters();
-  const counts: Record<string, number> = {};
-  
-  allChars.forEach((c) => {
-    counts[c.source] = (counts[c.source] || 0) + 1;
-  });
-  
-  return counts;
-};
-
-/**
- * Get characters count per archetype
- */
-export const getCharactersPerArchetype = (): Record<string, number> => {
-  const allChars = getAllCharacters();
-  const counts: Record<string, number> = {};
-  
-  allChars.forEach((c) => {
-    counts[c.archetype] = (counts[c.archetype] || 0) + 1;
-  });
-  
-  return counts;
-};
-
-/**
- * Get random characters
- */
-export const getRandomCharacters = (count: number = 5): CharacterTheme[] => {
-  const allChars = getAllCharacters();
-  const shuffled = [...allChars].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, allChars.length));
-};
-
-/**
- * Get similar characters based on tags
- */
-export const getSimilarCharacters = (characterId: string, limit: number = 5): CharacterTheme[] => {
-  const character = getCharacterByIdGlobal(characterId);
-  if (!character) return [];
-
-  const allChars = getAllCharacters();
-  const similar = allChars
-    .filter((c) => c.id !== characterId)
-    .map((c) => {
-      const commonTags = c.tags.filter((t) => character.tags.includes(t)).length;
-      const commonSource = c.source === character.source ? 2 : 0;
-      const commonArchetype = c.archetype === character.archetype ? 1 : 0;
-      const similarity = commonTags + commonSource + commonArchetype;
-      return { character: c, similarity };
-    })
-    .filter((item) => item.similarity > 0)
-    .sort((a, b) => b.similarity - a.similarity)
-    .slice(0, limit)
-    .map((item) => item.character);
-
-  return similar;
-};
-
-/**
- * Get characters statistics
- */
-export interface CharacterStatistics {
-  totalCharacters: number;
-  totalSources: number;
-  totalArchetypes: number;
-  totalTags: number;
-  charactersPerSource: Record<string, number>;
-  charactersPerArchetype: Record<string, number>;
-}
-
-export const getCharacterStatistics = (): CharacterStatistics => {
-  const allChars = getAllCharacters();
-  const sources = getAllSourcesGlobal();
-  const archetypes = getAllArchetypesGlobal();
-  const tags = getAllTagsGlobal();
-
-  return {
-    totalCharacters: allChars.length,
-    totalSources: sources.length,
-    totalArchetypes: archetypes.length,
-    totalTags: tags.length,
-    charactersPerSource: getCharactersPerSource(),
-    charactersPerArchetype: getCharactersPerArchetype(),
-  };
-};
-
-/**
- * Export key functions from individual databases
- */
-export { getCharacterById, searchCharacters, filterBySource, filterByArchetype, filterByTag, getAllSources, getAllArchetypes, getAllTags, getRandomCharacter, getCharacterCount } from '../data/characters';

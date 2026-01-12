@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import Navbar from '@/components/Navbar';
@@ -30,7 +32,7 @@ export default function Player() {
 
   // Load HLS.js dynamically (fallback if ES6 module import fails)
   useEffect(() => {
-    if (!window.Hls && typeof Hls === 'undefined') {
+    if (typeof Hls === 'undefined') {
       // Try to load from public folder
       const script = document.createElement('script');
       script.src = '/js/hls.min.js';
@@ -119,8 +121,6 @@ export default function Player() {
             maxMaxBufferLength: 600,
             maxBufferSize: 60 * 1000 * 1000, // 60 MB
             maxBufferHole: 0.5,
-            highWaterMarkThreshold: 0,
-            highWaterMarkMovingAverageThreshold: 0.5,
             abrBandWidthFactor: 0.95,
             abrBandWidthUpFactor: 0.5,
             abrMaxWithRealBitrate: true,

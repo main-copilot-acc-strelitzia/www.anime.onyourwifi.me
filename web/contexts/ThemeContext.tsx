@@ -117,8 +117,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
+  
+  // During SSR or before provider is mounted, return a default theme
+  // This prevents errors during static page generation
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    return {
+      currentTheme: THEMES.default,
+      themeName: 'default' as ThemeName,
+      setTheme: () => {}, // No-op during SSR
+      availableThemes: Object.keys(THEMES) as ThemeName[],
+    };
   }
+  
   return context;
 };

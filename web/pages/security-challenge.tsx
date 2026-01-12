@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styles from '@/styles/security-challenge.module.css';

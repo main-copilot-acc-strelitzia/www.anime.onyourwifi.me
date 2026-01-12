@@ -46,8 +46,16 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useToast = () => {
   const context = useContext(ToastContext);
+  
+  // During SSR or before provider is mounted, return a default no-op context
+  // This prevents errors during static page generation
   if (!context) {
-    throw new Error('useToast must be used within a ToastProvider');
+    return {
+      toasts: [],
+      addToast: () => '', // No-op during SSR
+      removeToast: () => {}, // No-op during SSR
+    };
   }
+  
   return context;
 };

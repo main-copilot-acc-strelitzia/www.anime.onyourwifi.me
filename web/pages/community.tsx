@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -105,23 +107,23 @@ export default function CommunityPage() {
   };
 
   const bgColor =
-    currentTheme === 'leblanc'
+    currentTheme.name === 'leblanc'
       ? 'bg-slate-900'
-      : currentTheme === 'luffy'
+      : currentTheme.name === 'luffy'
         ? 'bg-red-950'
         : 'bg-gray-100';
 
   const textColor =
-    currentTheme === 'leblanc'
+    currentTheme.name === 'leblanc'
       ? 'text-slate-100'
-      : currentTheme === 'luffy'
+      : currentTheme.name === 'luffy'
         ? 'text-red-50'
         : 'text-gray-900';
 
   const accentColor =
-    currentTheme === 'leblanc'
+    currentTheme.name === 'leblanc'
       ? 'bg-purple-600 hover:bg-purple-700'
-      : currentTheme === 'luffy'
+      : currentTheme.name === 'luffy'
         ? 'bg-red-600 hover:bg-red-700'
         : 'bg-blue-600 hover:bg-blue-700';
 
@@ -148,9 +150,9 @@ export default function CommunityPage() {
                   className={`px-4 py-2 rounded-lg transition-all ${
                     selectedCategory === cat.id
                       ? accentColor
-                      : currentTheme === 'leblanc'
+                      : currentTheme.name === 'leblanc'
                         ? 'bg-slate-700 hover:bg-slate-600'
-                        : currentTheme === 'luffy'
+                        : currentTheme.name === 'luffy'
                           ? 'bg-red-800 hover:bg-red-700'
                           : 'bg-gray-300 hover:bg-gray-400'
                   }`}
@@ -172,7 +174,7 @@ export default function CommunityPage() {
 
           {/* New Post Form */}
           {showNewPost && isLoggedIn && (
-            <div className={`mb-8 p-6 rounded-lg ${currentTheme === 'leblanc' ? 'bg-slate-800' : currentTheme === 'luffy' ? 'bg-red-900' : 'bg-white'}`}>
+            <div className={`mb-8 p-6 rounded-lg ${currentTheme.name === 'leblanc' ? 'bg-slate-800' : currentTheme.name === 'luffy' ? 'bg-red-900' : 'bg-white'}`}>
               <h2 className="text-2xl font-bold mb-4">Create a New Post</h2>
               <form onSubmit={handleCreatePost} className="space-y-4">
                 <div>
@@ -183,9 +185,9 @@ export default function CommunityPage() {
                     onChange={(e) => setNewPostTitle(e.target.value)}
                     placeholder="What's on your mind?"
                     className={`w-full px-4 py-2 rounded-lg border ${
-                      currentTheme === 'leblanc'
+                      currentTheme.name === 'leblanc'
                         ? 'bg-slate-700 border-slate-600'
-                        : currentTheme === 'luffy'
+                        : currentTheme.name === 'luffy'
                           ? 'bg-red-800 border-red-700'
                           : 'bg-gray-100 border-gray-300'
                     } ${textColor} focus:outline-none focus:ring-2 focus:ring-offset-2`}
@@ -200,9 +202,9 @@ export default function CommunityPage() {
                     placeholder="Share your thoughts..."
                     rows={4}
                     className={`w-full px-4 py-2 rounded-lg border ${
-                      currentTheme === 'leblanc'
+                      currentTheme.name === 'leblanc'
                         ? 'bg-slate-700 border-slate-600'
-                        : currentTheme === 'luffy'
+                        : currentTheme.name === 'luffy'
                           ? 'bg-red-800 border-red-700'
                           : 'bg-gray-100 border-gray-300'
                     } ${textColor} focus:outline-none focus:ring-2 focus:ring-offset-2`}
@@ -234,14 +236,14 @@ export default function CommunityPage() {
                   onClick={() => handlePostClick(post.id)}
                   className={`p-6 rounded-lg cursor-pointer transition-all transform hover:scale-102 ${
                     post.pinned
-                      ? currentTheme === 'leblanc'
+                      ? currentTheme.name === 'leblanc'
                         ? 'bg-purple-900 border-2 border-purple-500'
-                        : currentTheme === 'luffy'
+                        : currentTheme.name === 'luffy'
                           ? 'bg-red-900 border-2 border-red-500'
                           : 'bg-blue-100 border-2 border-blue-500'
-                      : currentTheme === 'leblanc'
+                      : currentTheme.name === 'leblanc'
                         ? 'bg-slate-800 hover:bg-slate-700'
-                        : currentTheme === 'luffy'
+                        : currentTheme.name === 'luffy'
                           ? 'bg-red-900 hover:bg-red-800'
                           : 'bg-white hover:shadow-lg'
                   }`}
@@ -267,7 +269,7 @@ export default function CommunityPage() {
               ))}
             </div>
           ) : (
-            <div className={`text-center py-12 ${currentTheme === 'leblanc' ? 'bg-slate-800' : currentTheme === 'luffy' ? 'bg-red-900' : 'bg-white'} rounded-lg`}>
+            <div className={`text-center py-12 ${currentTheme.name === 'leblanc' ? 'bg-slate-800' : currentTheme.name === 'luffy' ? 'bg-red-900' : 'bg-white'} rounded-lg`}>
               <p className="text-lg opacity-75">No posts yet in this category.</p>
               {isLoggedIn && (
                 <p className="text-sm opacity-50 mt-2">Be the first to start the conversation!</p>

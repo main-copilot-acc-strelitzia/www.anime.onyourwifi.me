@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -118,9 +120,9 @@ export default function AdminSecurityPage() {
     }
   };
 
-  const bgColor = currentTheme === 'leblanc' ? 'bg-slate-800' : currentTheme === 'luffy' ? 'bg-red-900' : 'bg-white';
+  const bgColor = currentTheme.name === 'leblanc' ? 'bg-slate-800' : currentTheme.name === 'luffy' ? 'bg-red-900' : 'bg-white';
   const textColor =
-    currentTheme === 'leblanc' ? 'text-slate-100' : currentTheme === 'luffy' ? 'text-red-50' : 'text-gray-900';
+    currentTheme.name === 'leblanc' ? 'text-slate-100' : currentTheme.name === 'luffy' ? 'text-red-50' : 'text-gray-900';
 
   return (
     <AdminLayout>
@@ -149,9 +151,9 @@ export default function AdminSecurityPage() {
                   onChange={(e) => setNewAdminEmail(e.target.value)}
                   placeholder="admin@example.com"
                   className={`w-full px-4 py-2 rounded-lg border ${
-                    currentTheme === 'leblanc'
+                    currentTheme.name === 'leblanc'
                       ? 'bg-slate-700 border-slate-600'
-                      : currentTheme === 'luffy'
+                      : currentTheme.name === 'luffy'
                         ? 'bg-red-800 border-red-700'
                         : 'bg-gray-100 border-gray-300'
                   } ${textColor}`}
@@ -166,9 +168,9 @@ export default function AdminSecurityPage() {
                   onChange={(e) => setNewAdminIP(e.target.value)}
                   placeholder="192.168.1.100"
                   className={`w-full px-4 py-2 rounded-lg border ${
-                    currentTheme === 'leblanc'
+                    currentTheme.name === 'leblanc'
                       ? 'bg-slate-700 border-slate-600'
-                      : currentTheme === 'luffy'
+                      : currentTheme.name === 'luffy'
                         ? 'bg-red-800 border-red-700'
                         : 'bg-gray-100 border-gray-300'
                   } ${textColor}`}
@@ -179,9 +181,9 @@ export default function AdminSecurityPage() {
             <button
               type="submit"
               className={`w-full px-4 py-2 rounded-lg font-semibold transition-all ${
-                currentTheme === 'leblanc'
+                currentTheme.name === 'leblanc'
                   ? 'bg-purple-600 hover:bg-purple-700'
-                  : currentTheme === 'luffy'
+                  : currentTheme.name === 'luffy'
                     ? 'bg-red-600 hover:bg-red-700'
                     : 'bg-blue-600 hover:bg-blue-700'
               } text-white`}
@@ -204,9 +206,9 @@ export default function AdminSecurityPage() {
                   <div
                     key={admin.id}
                     className={`p-4 rounded-lg border ${
-                      currentTheme === 'leblanc'
+                      currentTheme.name === 'leblanc'
                         ? 'border-slate-600 bg-slate-700'
-                        : currentTheme === 'luffy'
+                        : currentTheme.name === 'luffy'
                           ? 'border-red-700 bg-red-800'
                           : 'border-gray-300 bg-gray-50'
                     }`}

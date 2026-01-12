@@ -212,8 +212,6 @@ export const safeRedirect = (url: string, fallback: string = '/'): void => {
   }
 };
 
-};
-
 /**
  * Validate password strength
  */

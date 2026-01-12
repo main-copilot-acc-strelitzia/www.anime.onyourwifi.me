@@ -7,6 +7,10 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ToastProvider } from '@/contexts/ToastContext';
 import ToastContainer from '@/components/ToastContainer';
 
+// Render all pages on-demand (server-side) instead of static generation
+// This allows React Context to be available for useTheme and useToast hooks
+export const dynamic = 'force-dynamic';
+
 // SECURITY: Ensure no character data is imported at app level
 // Character data is admin-only and should never be loaded for watchers
 

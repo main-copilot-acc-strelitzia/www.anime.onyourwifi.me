@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -21,7 +23,7 @@ interface Episode {
 
 const HomePage: React.FC = () => {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { currentTheme } = useTheme();
   const [loading, setLoading] = React.useState(true);
   const [videos, setVideos] = useState<Episode[]>([]);
   const [error, setError] = useState<string | null>(null);

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import React, { useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/contexts/ToastContext';

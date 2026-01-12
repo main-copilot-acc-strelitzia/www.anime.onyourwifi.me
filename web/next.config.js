@@ -53,6 +53,12 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   
+  // On-demand entries for dynamic pages
+  onDemandEntries: {
+    maxInactiveAge: 60 * 60 * 1000,
+    pagesBufferLength: 5,
+  },
+  
   // Cross-platform compatibility
   webpack: (config) => {
     config.resolve.fallback = {
