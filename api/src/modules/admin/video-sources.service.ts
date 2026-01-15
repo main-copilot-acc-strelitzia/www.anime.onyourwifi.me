@@ -26,7 +26,7 @@ export class VideoSourcesService {
       const sources = await this.prisma.videoSource.findMany({
         orderBy: { priority: 'asc' },
       });
-      return sources;
+      return sources.map(s => ({ ...s, type: s.type as 'local' | 'network' }));
     } catch (error) {
       console.error('Error fetching video sources:', error);
       return [];
@@ -42,7 +42,7 @@ export class VideoSourcesService {
         where: { isActive: true },
         orderBy: { priority: 'asc' },
       });
-      return sources;
+      return sources.map(s => ({ ...s, type: s.type as 'local' | 'network' }));
     } catch (error) {
       console.error('Error fetching active sources:', error);
       return [];
@@ -84,7 +84,7 @@ export class VideoSourcesService {
         },
       });
 
-      return source;
+      return { ...source, type: source.type as 'local' | 'network' };
     } catch (error) {
       console.error('Error adding video source:', error);
       throw error;
@@ -128,7 +128,7 @@ export class VideoSourcesService {
         data: updates,
       });
 
-      return source;
+      return { ...source, type: source.type as 'local' | 'network' };
     } catch (error) {
       console.error('Error updating video source:', error);
       throw error;
@@ -265,9 +265,10 @@ export class VideoSourcesService {
    */
   async getSourceById(id: string): Promise<VideoSourceConfig | null> {
     try {
-      return await this.prisma.videoSource.findUnique({
+      const source = await this.prisma.videoSource.findUnique({
         where: { id },
       });
+      return source ? { ...source, type: source.type as 'local' | 'network' } : null;
     } catch (error) {
       return null;
     }
