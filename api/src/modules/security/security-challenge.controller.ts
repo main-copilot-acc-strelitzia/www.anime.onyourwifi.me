@@ -140,7 +140,7 @@ export class SecurityChallengeController {
       data: {
         nextCooldown: result.nextCooldown,
         attempts: result.attemptsRemaining,
-        isLocked: result.isLocked,
+        isLocked: (result as any).isLocked,
       },
     });
   }

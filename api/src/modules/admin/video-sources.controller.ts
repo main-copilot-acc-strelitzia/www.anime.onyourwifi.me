@@ -11,7 +11,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { VideoSourcesService } from './video-sources.service';
-import { MainAdminGuard } from '@/middleware/main-admin.guard';
+import { MainAdminGuard } from '@/common/guards/main-admin.guard';
 
 @Controller('admin/video-sources')
 @UseGuards(MainAdminGuard)

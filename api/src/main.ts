@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as csurf from 'csurf';
 import { ValidationPipe } from '@nestjs/common';
 import Redis from 'ioredis';
-import * as rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 
 async function bootstrap() {

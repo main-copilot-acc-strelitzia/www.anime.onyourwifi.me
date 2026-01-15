@@ -14,7 +14,7 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@/common/guards/jwt.guard';
+import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { CommunityService } from './community.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { CreateReplyDto } from './dto/create-reply.dto';

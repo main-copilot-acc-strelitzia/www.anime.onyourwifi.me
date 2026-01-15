@@ -104,9 +104,6 @@ export class MainAdminService {
       skip: offset,
       include: {
         actor: { select: { id: true, username: true, email: true, role: true } },
-        target: {
-          select: { id: true, username: true, email: true, role: true },
-        },
       },
     });
   }
@@ -121,9 +118,6 @@ export class MainAdminService {
       skip: offset,
       include: {
         actor: { select: { id: true, username: true, email: true, role: true } },
-        target: {
-          select: { id: true, username: true, email: true, role: true },
-        },
       },
     });
   }

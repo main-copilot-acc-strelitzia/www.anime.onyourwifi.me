@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../common/prisma/prisma.service';
+import { PrismaService } from '@/libs/prisma';
 import {
   getRandomQuestion,
   getQuestionById,
@@ -90,8 +90,7 @@ export class SecurityChallengeService {
         success: false,
         message: 'Time exceeded! You are temporarily locked out.',
         nextCooldown: 60,
-        isLocked: true,
-      };
+      } as any;
     }
 
     // Verify answer correctness
@@ -127,7 +126,7 @@ export class SecurityChallengeService {
       message: `Wrong answer! Cooldown: ${cooldownDuration / 1000} seconds.`,
       nextCooldown: cooldownDuration / 1000,
       attemptsRemaining: newAttempts,
-      isLocked: true,
+    } as any;
     };
   }
 

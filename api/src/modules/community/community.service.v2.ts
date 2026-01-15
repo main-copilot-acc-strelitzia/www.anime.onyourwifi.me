@@ -171,11 +171,11 @@ export class CommunityServiceV2 {
       moderators: post.moderators.map((m) => ({ id: m.id, username: m.username })),
       category: post.category,
       views: post.views + 1,
-      replies: post.replies.length,
+      replyCount: post.replies.length,
       pinned: post.pinned,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
-      replies: post.replies.map((reply) => ({
+      replyList: post.replies.map((reply) => ({
         id: reply.id,
         content: reply.content,
         author: reply.author.username || 'Anonymous',

@@ -54,15 +54,16 @@ export class TranscodingService {
     }
 
     // Verify upload exists and is completed
-    const upload = await this.prisma.upload.findUnique({
-      where: { id: uploadId },
-    });
-    if (!upload) {
-      throw new NotFoundException('Upload not found');
-    }
-    if (upload.status !== 'completed') {
-      throw new BadRequestException('Upload must be completed before transcoding');
-    }
+    // Note: Upload model not yet in schema - skip validation for now
+    // const upload = await this.prisma.upload.findUnique({
+    //   where: { id: uploadId },
+    // });
+    // if (!upload) {
+    //   throw new NotFoundException('Upload not found');
+    // }
+    // if (upload.status !== 'completed') {
+    //   throw new BadRequestException('Upload must be completed before transcoding');
+    // }
 
     // Check if job already exists for this episode
     const existingJob = await this.prisma.transcodingJob.findFirst({

@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 
 interface RequestWithUser extends Request {
   user?: any;
-  ip?: string;
+  ip?: string | undefined;
 }
 
 @Injectable()
@@ -26,7 +26,7 @@ export class AdminIPWhitelistMiddleware implements NestMiddleware {
     // Check if user is admin
     const user = await this.prisma.user.findUnique({
       where: { id: req.user.id },
-      select: { role: true, isMainAdmin: true },
+      select: { role: true },
     });
 
     if (!user || (user.role !== 'admin' && user.role !== 'main_admin')) {
