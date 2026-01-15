@@ -5,6 +5,6 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler) {
-    return next.handle().pipe(map((data) => ({ ok: true, data }))) as any;
+    return (next.handle() as unknown).pipe(map((data) => ({ ok: true, data }))) as any;
   }
 }
