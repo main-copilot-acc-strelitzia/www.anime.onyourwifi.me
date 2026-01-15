@@ -127,7 +127,6 @@ export class SecurityChallengeService {
       nextCooldown: cooldownDuration / 1000,
       attemptsRemaining: newAttempts,
     } as any;
-    };
   }
 
   /**
