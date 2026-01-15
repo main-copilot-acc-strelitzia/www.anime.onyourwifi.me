@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 
 interface RequestWithUser extends Request {
   user?: any;
-  ip?: string;
+  ip: string | undefined;
 }
 
 @Injectable()

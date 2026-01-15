@@ -32,7 +32,7 @@ export class SecurityVerificationMiddleware implements NestMiddleware {
     }
 
     // Check if user has verified security challenge
-    const isVerified = (req.session as any)?.securityVerified === true;
+    const isVerified = ((req as any).session as any)?.securityVerified === true;
 
     if (!isVerified) {
       // User not verified - redirect to security challenge page
